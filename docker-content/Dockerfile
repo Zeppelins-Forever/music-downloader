@@ -63,6 +63,7 @@ USER appuser
 
 # Copy the executable from the "build" stage.
 #COPY --from=build /bin/hello.sh /bin/
+
 COPY --chown=appuser download.sh /app/
 RUN chmod +x /app/download.sh
 WORKDIR /app
