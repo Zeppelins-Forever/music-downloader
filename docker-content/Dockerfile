@@ -34,8 +34,10 @@ FROM alpine:latest
 #RUN chmod +x /bin/hello.sh
 
 ###### MY CODE ######
-RUN apk update && apk add yt-dlp ffmpeg mutagen && mkdir -p /app/output
-#####################
+RUN apk update && apk add ffmpeg mutagen && mkdir -p /app/output
+COPY yt-dlp /bin/
+RUN chmod +x /bin/yt-dlp && yt-dlp --update-to master
+##################### this can be changed to "--update-to nightly" or "--update-to stable" (maybe?) when needed.
 
 ################################################################################
 # Create a final stage for running your application.
