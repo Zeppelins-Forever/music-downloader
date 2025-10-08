@@ -39,8 +39,9 @@ RUN apk update && apk add ffmpeg mutagen && mkdir -p /app/output
 
 #update this link to the newest "yt-dlp" build from the master branch: https://github.com/yt-dlp/yt-dlp-master-builds/releases 
 RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp 
-#this binary is universal. Other binaries won't work on alpine due to being compiled with glibc, which alpine doesn't use. Below is an example of platform-specific packages for different builds (though again, these won't work because Alpine has no glibc support).
+#this binary is universal. Other binaries won't work on alpine due to being compiled with glibc, which alpine doesn't use. 
 
+#Below is an example of platform-specific packages for different builds (though these won't work because Alpine has no glibc support, so apps need to either come from Alpine repo or be compatible without being compiled via glibc).
 # RUN if [ "$TARGETARCH" = "arm64" ]; then \
 #        echo "\n\n$TARGETARCH - Building for ARM64, installing ARM-specific packages...\n\n" ; \
 #        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux_aarch64 ; \
@@ -52,10 +53,12 @@ RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/
 #        exit 1 ; \
 #    fi
 
-#RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp
+#make yt-dlp executable for all users
 RUN chmod +x /bin/yt-dlp
-#RUN yt-dlp --update-to-nightly
-##################### this can be changed to "--update-to nightly" or "--update-to stable/master" (maybe?) when needed.
+#update yt-dlp if needed. Will update from whatever branch it's currently on, such as master, nightly, or stable.
+RUN yt-dlp -U
+
+##################### this can be changed to "--update-to stable/nightly/master" as needed.
 
 ################################################################################
 # Create a final stage for running your application.
