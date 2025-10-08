@@ -18,7 +18,7 @@
 # (e.g., alpine:3.17.2) or SHA (e.g., alpine@sha256:c41ab5c992deb4fe7e5da09f67a8804a46bd0592bfdf0b1847dde0e0889d2bff).
 
 FROM alpine:latest
-
+ARG TARGETARCH
 ################################################################################
 # Create a stage for building/compiling the application.
 #
@@ -34,9 +34,24 @@ FROM alpine:latest
 #RUN chmod +x /bin/hello.sh
 
 ###### MY CODE ######
-RUN apk update && apk add ffmpeg mutagen && mkdir -p /app/output
-COPY yt-dlp /bin/
-RUN chmod +x /bin/yt-dlp && yt-dlp --update-to master
+RUN apk update && apk add ffmpeg mutagen wget && mkdir -p /app/output
+#COPY yt-dlp /bin/
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+        echo "\n\n$TARGETARCH - Building for ARM64, installing ARM-specific packages...\n\n" ; \
+        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux_aarch64 ; \
+        chmod +x /bin/yt-dlp ; \
+    elif [ "$TARGETARCH" = "amd64" ]; then \
+        echo "\n\n$TARGETARCH - Building for AMD64, installing x86-64-specific packages...\n\n" ; \
+        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux ; \
+        chmod +x /bin/yt-dlp ; \
+    else \
+        echo "\n\nUNSUPPORTED ARCHITECTURE: $TARGETARCH\n\n" ; \
+        exit 1 ; \
+    fi
+    
+#RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp 
+RUN chmod +x /bin/yt-dlp #&& yt-dlp --update-to nightly
+#RUN yt-dlp --update-to-nightly
 ##################### this can be changed to "--update-to nightly" or "--update-to stable" (maybe?) when needed.
 
 ################################################################################
