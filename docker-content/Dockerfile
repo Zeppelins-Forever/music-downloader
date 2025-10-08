@@ -53,9 +53,9 @@ RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/
 #    fi
 
 #RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp
-RUN chmod +x /bin/yt-dlp #&& yt-dlp --update-to nightly
+RUN chmod +x /bin/yt-dlp
 #RUN yt-dlp --update-to-nightly
-##################### this can be changed to "--update-to nightly" or "--update-to stable" (maybe?) when needed.
+##################### this can be changed to "--update-to nightly" or "--update-to stable/master" (maybe?) when needed.
 
 ################################################################################
 # Create a final stage for running your application.
