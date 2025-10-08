@@ -34,22 +34,24 @@ ARG TARGETARCH
 #RUN chmod +x /bin/hello.sh
 
 ###### MY CODE ######
-RUN apk update && apk add ffmpeg mutagen wget && mkdir -p /app/output
+RUN apk update && apk add ffmpeg mutagen && mkdir -p /app/output
 #COPY yt-dlp /bin/
-RUN if [ "$TARGETARCH" = "arm64" ]; then \
-        echo "\n\n$TARGETARCH - Building for ARM64, installing ARM-specific packages...\n\n" ; \
-        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux_aarch64 ; \
-        chmod +x /bin/yt-dlp ; \
-    elif [ "$TARGETARCH" = "amd64" ]; then \
-        echo "\n\n$TARGETARCH - Building for AMD64, installing x86-64-specific packages...\n\n" ; \
-        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux ; \
-        chmod +x /bin/yt-dlp ; \
-    else \
-        echo "\n\nUNSUPPORTED ARCHITECTURE: $TARGETARCH\n\n" ; \
-        exit 1 ; \
-    fi
-    
-#RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp 
+
+#update this link to the newest "yt-dlp" build from the master branch: https://github.com/yt-dlp/yt-dlp-master-builds/releases 
+RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp #this binary is universal. Other binaries won't work on alpine due to being compiled with glibc, which alpine doesn't use. Below is an example of platform-specific packages for different builds (though again, these won't work because Alpine has no glibc support).
+
+# RUN if [ "$TARGETARCH" = "arm64" ]; then \
+#        echo "\n\n$TARGETARCH - Building for ARM64, installing ARM-specific packages...\n\n" ; \
+#        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux_aarch64 ; \
+#    elif [ "$TARGETARCH" = "amd64" ]; then \
+#        echo "\n\n$TARGETARCH - Building for AMD64, installing x86-64-specific packages...\n\n" ; \
+#        wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp_linux ; \
+#    else \
+#        echo "\n\nUNSUPPORTED ARCHITECTURE: $TARGETARCH\n\n" ; \
+#        exit 1 ; \
+#    fi
+
+#RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp
 RUN chmod +x /bin/yt-dlp #&& yt-dlp --update-to nightly
 #RUN yt-dlp --update-to-nightly
 ##################### this can be changed to "--update-to nightly" or "--update-to stable" (maybe?) when needed.
