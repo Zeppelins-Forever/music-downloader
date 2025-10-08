@@ -38,7 +38,8 @@ RUN apk update && apk add ffmpeg mutagen && mkdir -p /app/output
 #COPY yt-dlp /bin/
 
 #update this link to the newest "yt-dlp" build from the master branch: https://github.com/yt-dlp/yt-dlp-master-builds/releases 
-RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp #this binary is universal. Other binaries won't work on alpine due to being compiled with glibc, which alpine doesn't use. Below is an example of platform-specific packages for different builds (though again, these won't work because Alpine has no glibc support).
+RUN wget -O /bin/yt-dlp https://github.com/yt-dlp/yt-dlp-master-builds/releases/download/2025.10.01.065439/yt-dlp 
+#this binary is universal. Other binaries won't work on alpine due to being compiled with glibc, which alpine doesn't use. Below is an example of platform-specific packages for different builds (though again, these won't work because Alpine has no glibc support).
 
 # RUN if [ "$TARGETARCH" = "arm64" ]; then \
 #        echo "\n\n$TARGETARCH - Building for ARM64, installing ARM-specific packages...\n\n" ; \
