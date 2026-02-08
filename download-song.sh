@@ -22,6 +22,9 @@ Help()
     printf "h     Print this Help.\n"
 }
 
+# Update the container
+docker pull zeppelinsforever/music-downloader:latest
+
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
